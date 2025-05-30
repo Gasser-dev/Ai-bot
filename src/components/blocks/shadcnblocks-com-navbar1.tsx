@@ -70,7 +70,6 @@ const Navbar1 = ({
             </a>
           </div>
 
-
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm">
               <a href={auth.login.url}>{auth.login.text}</a>
