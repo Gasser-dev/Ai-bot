@@ -27,7 +27,7 @@ interface MenuItem {
   title: string;
   url: string;
   description?: string;
-  icon?: JSX.Element;
+  icon?: React.ReactNode;
   items?: MenuItem[];
 }
 
