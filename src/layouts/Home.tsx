@@ -16,11 +16,12 @@ function Home() {
         })
     })
     return (
-        <div className="min-h-screen bg-[#15042e] px-2">
+        <div className="min-h-screen bg-[#15042e] px-2 overflow-hidden">
             <Navbar/>
             <TextContainer />
-            <div className="flex justify-center min-h-[80vh]">
-                <div id="Input" className="md:w-2/3 w-full flex justify-center items-end ">
+            <div className="flex justify-center min-h-[80vh] items-end">
+   
+                <div id="Input" className="md:w-2/3 w-full h-fit flex justify-center items-end ">
             <PromptInputWithActions />
                 </div>
             </div>

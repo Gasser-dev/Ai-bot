@@ -47,7 +47,7 @@ export function PromptInputWithActions() {
       onValueChange={setInput}
       isLoading={isLoading}
       onSubmit={handleSubmit}
-      className="w-full max-w-[350px] bg-[#724fa1] border-0"
+      className="w-full max-w-full h-44 bg-[#724fa1] border-0"
     >
       {files.length > 0 && (
         <div className="flex flex-wrap gap-2 pb-2">
