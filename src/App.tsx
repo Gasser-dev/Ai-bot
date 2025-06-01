@@ -1,10 +1,13 @@
-import Home from './layouts/Home'
+
 import './index.css'
+import Pages from './components/pages'
 
 function App() {
 
   return (
-    <Home/>
+    <> 
+    <Pages/>
+    </>
   )
 }
 
