@@ -10,6 +10,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import { Link } from "react-router";
+import gsap from "gsap";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -167,9 +168,20 @@ const Logo = (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElemen
 
 
 export default function Login04() {
+  React.useEffect(() => {
+    gsap.fromTo("#login_con",{
+      y:-200,
+      opacity:0,
+    },{
+      y:0,
+      opacity:1,
+      duration:1.5,
+      ease:"power2.out",
+    })
+  })
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
+    <div className="flex items-center border justify-center min-h-screen">
+      <div id="login_con" className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex items-center space-x-1.5">
             <Logo
@@ -186,7 +198,7 @@ export default function Login04() {
           <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
             Don't have an account?{" "}
             <a
-              href="#"
+              href="/signup"
               className="font-medium text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90"
             >
               Sign up

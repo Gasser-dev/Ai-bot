@@ -211,7 +211,7 @@ export default function Login05() {
   })
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div id="signup_con" className="flex flex-1 flex-col border justify-center px-4 py-10 lg:px-6">
+      <div id="signup_con" className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Logo
             className="mx-auto h-10 w-10 text-foreground dark:text-foreground"
@@ -336,7 +336,7 @@ export default function Login05() {
         <p className="mt-6 text-center text-sm text-muted-foreground dark:text-muted-foreground">
           Already have an account?{" "}
           <a
-            href="#"
+            href="/login"
             className="font-medium text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90"
           >
             Sign in

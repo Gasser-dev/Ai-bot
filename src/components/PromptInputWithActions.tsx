@@ -9,6 +9,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { ArrowUp, Paperclip, Square, X } from "lucide-react"
 import { useRef, useState } from "react"
+import { useAppDispatch } from "@/redux/hooks"
+import { submit_hide_text, set_message,set_Loading } from "@/redux/submitPromptSlice"
 
 export function PromptInputWithActions() {
   const [input, setInput] = useState("")
@@ -17,12 +19,17 @@ export function PromptInputWithActions() {
   const uploadInputRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = () => {
+    
     if (input.trim() || files.length > 0) {
       setIsLoading(true)
+      dispatch(submit_hide_text(true))
+      dispatch(set_message(input))
+      dispatch(set_Loading(true))
       setTimeout(() => {
         setIsLoading(false)
         setInput("")
         setFiles([])
+        dispatch(set_Loading(false))
       }, 2000)
     }
   }
@@ -40,6 +47,8 @@ export function PromptInputWithActions() {
       uploadInputRef.current.value = ""
     }
   }
+
+  const dispatch = useAppDispatch()
 
   return (
     <PromptInput
