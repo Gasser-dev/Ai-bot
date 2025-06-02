@@ -10,6 +10,7 @@ import * as LabelPrimitive from "@radix-ui/react-label";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import { CheckIcon } from "lucide-react";
 import type { JSX , SVGProps } from "react";
+import gsap from "gsap";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -196,9 +197,21 @@ const Logo = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
 );
 
 export default function Login05() {
+
+  React.useEffect(() => {
+    gsap.fromTo("#signup_con",{
+      y:-200,
+      opacity:0
+    },{
+      y:0,
+      opacity:1,
+      duration:2,
+      ease:"power2.out"
+    })
+  })
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
+      <div id="signup_con" className="flex flex-1 flex-col border justify-center px-4 py-10 lg:px-6">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Logo
             className="mx-auto h-10 w-10 text-foreground dark:text-foreground"
