@@ -23,7 +23,7 @@ const initialState: SubmitPromptState = {
     state.message = payload.payload;
   },
   set_Loading: (state, payload: PayloadAction<boolean>) => {
-    state.hide_text = payload.payload;
+    state.isloading = payload.payload;
   },
   }
  })

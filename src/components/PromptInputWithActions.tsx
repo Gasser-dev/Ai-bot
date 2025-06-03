@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowUp, Paperclip, Square, X } from "lucide-react"
 import { useRef, useState } from "react"
 import { useAppDispatch } from "@/redux/hooks"
-import { submit_hide_text, set_message,set_Loading } from "@/redux/submitPromptSlice"
+import { submit_hide_text, set_message, set_Loading } from "@/redux/submitPromptSlice"
 
 export function PromptInputWithActions() {
   const [input, setInput] = useState("")

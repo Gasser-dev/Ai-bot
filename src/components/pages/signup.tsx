@@ -9,8 +9,13 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import { CheckIcon } from "lucide-react";
-import type { JSX , SVGProps } from "react";
+import type { JSX, SVGProps } from "react";
 import gsap from "gsap";
+import * as yup from 'yup';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -198,17 +203,44 @@ const Logo = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
 
 export default function Login05() {
 
+  type FormData = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  };
   React.useEffect(() => {
-    gsap.fromTo("#signup_con",{
-      y:-200,
-      opacity:0
-    },{
-      y:0,
-      opacity:1,
-      duration:2,
-      ease:"power2.out"
+    gsap.fromTo("#signup_con", {
+      y: -200,
+      opacity: 0
+    }, {
+      y: 0,
+      opacity: 1,
+      duration: 2,
+      ease: "power2.out"
     })
-  })
+  }, [])
+  const signupSchema = yup.object({
+    name: yup.string().required("Name is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup.string().min(8, "Password must be at least 8 characters").required(),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required(),
+  });
+  // Form handling
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(signupSchema),
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log("Form data:", data);
+    // Add your form submission logic here
+  };
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div id="signup_con" className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
@@ -224,7 +256,10 @@ export default function Login05() {
 
         <Card className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <CardContent>
-            <form action="#" method="post" className="space-y-4">
+            <form onSubmit={handleSubmit((data) => {
+              onSubmit(data);
+              window.location.href = "/";
+            })} className="space-y-4">
               <div>
                 <Label
                   htmlFor="name-login-05"
@@ -235,11 +270,14 @@ export default function Login05() {
                 <Input
                   type="text"
                   id="name-login-05"
-                  name="name-login-05"
+                  {...register("name")}
                   autoComplete="name-login-05"
                   placeholder="Name"
                   className="mt-2"
                 />
+                {errors.name && (
+                  <p className="text-sm text-destructive">{errors.name?.message as string}</p>
+                )}
               </div>
 
               <div>
@@ -252,11 +290,14 @@ export default function Login05() {
                 <Input
                   type="email"
                   id="email-login-05"
-                  name="email-login-05"
+                  {...register("email")}
                   autoComplete="email-login-05"
                   placeholder="ephraim@blocks.so"
                   className="mt-2"
                 />
+                                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email?.message as string}</p>
+                )}
               </div>
 
               <div>
@@ -268,12 +309,16 @@ export default function Login05() {
                 </Label>
                 <Input
                   type="password"
-                  id="password-login-05   "
-                  name="password-login-05"
+                  id="password-login-05"
+                  {...register("password")}
+
                   autoComplete="password-login-05"
                   placeholder="Password"
                   className="mt-2"
                 />
+                                {errors.password && (
+                  <p className="text-sm text-destructive">{errors.password?.message as string}</p>
+                )}
               </div>
 
               <div>
@@ -286,11 +331,14 @@ export default function Login05() {
                 <Input
                   type="password"
                   id="confirm-password-login-05"
-                  name="confirm-password-login-05"
+                  {...register("confirmPassword")}
                   autoComplete="confirm-password-login-05"
                   placeholder="Password"
                   className="mt-2"
                 />
+                                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">{errors.confirmPassword?.message as string}</p>
+                )}
               </div>
 
               <div className="mt-2 flex items-start">
