@@ -3,7 +3,7 @@ import {
     ChatBubbleAvatar,
     ChatBubbleMessage,
   } from "@/components/ui/chat-bubble"
-import { useAppSelector } from "@/redux/hooks"
+
   import { Copy, RefreshCcw } from "lucide-react"
   const messages = [
     {
