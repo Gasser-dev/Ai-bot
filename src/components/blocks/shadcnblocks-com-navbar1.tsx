@@ -7,6 +7,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import type { RootState } from "@/redux";
+import { rdx_login } from "@/redux/userSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 interface MenuItem {
   title: string;
@@ -42,10 +47,10 @@ interface Navbar1Props {
 
 const Navbar1 = ({
   logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://www.shadcnblocks.com/images/block/block-1.svg",
+    url: "#",
+    src: "#",
     alt: "logo",
-    title: "Shadcnblocks.com",
+    title: "AiBot",
   },
   mobileExtraLinks = [
     { name: "Press", url: "#" },
@@ -58,6 +63,19 @@ const Navbar1 = ({
     signup: { text: "Sign up", url: "#" },
   },
 }: Navbar1Props) => {
+  const isloggedIn = useAppSelector((state: RootState) => state.userSlice.loggedIn)
+  const dispatch = useAppDispatch()
+  const data = JSON.parse(localStorage.getItem("user") || "{}")
+  const navigate = useNavigate()
+  const name = data?.name
+  const handle_logout = () => {
+    dispatch(rdx_login(false))
+    localStorage.removeItem("user")
+    toast.success("Logged out successfully")
+    setTimeout(() => {
+      window.location.href = "/"
+    }, 500)
+  }
   return (
     <section className="py-4">
       <div className="container min-w-screen px-4">
@@ -69,15 +87,25 @@ const Navbar1 = ({
               <span className="text-lg text-white font-semibold">{logo.title}</span>
             </a>
           </div>
-
-          <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.text}</a>
-            </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.text}</a>
-            </Button>
-          </div>
+          {
+            !isloggedIn ? (
+              <div className="flex gap-2">
+              <Button onClick={() => navigate("/login")} asChild variant="outline" size="sm">
+                <a>{auth.login.text}</a>
+              </Button>
+              <Button onClick={() => navigate("/signin")} asChild size="sm">
+                <a>{auth.signup.text}</a>
+              </Button>
+            </div>
+            )
+            :
+            <div className="flex gap-2 items-center">
+              <p className="text-white">welcome back {name}</p>
+              <Button onClick={handle_logout} variant="outline" role="button">
+                Logout
+              </Button>
+            </div>
+          }
         </nav>
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
@@ -116,14 +144,25 @@ const Navbar1 = ({
                       ))}
                     </div>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <a href={auth.login.url}>{auth.login.text}</a>
-                    </Button>
-                    <Button asChild>
-                      <a href={auth.signup.url}>{auth.signup.text}</a>
-                    </Button>
-                  </div>
+                  {
+            !isloggedIn ? (
+              <div className="flex flex-col gap-3">
+              <Button asChild variant="outline">
+                <a href={auth.login.url}>{auth.login.text}</a>
+              </Button>
+              <Button asChild >
+                <a href={auth.signup.url}>{auth.signup.text}</a>
+              </Button>
+            </div>
+            )
+            :
+            <div className="flex flex-col items-center gap-3">
+              <p>welcome back {name}</p>
+              <Button onClick={handle_logout} variant="outline">
+                Logout
+              </Button>
+            </div>
+          }
                 </div>
               </SheetContent>
             </Sheet>

@@ -14,6 +14,9 @@ import gsap from "gsap";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "@/redux/hooks";
+import { rdx_login } from "@/redux/userSlice";
 
 
 
@@ -202,6 +205,17 @@ const Logo = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
 );
 
 export default function Login05() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  yup.setLocale({
+    mixed: {
+      required: "This field is required",
+    },
+    string:{
+      matches: "Invalid email",
+    }
+  })
 
   type FormData = {
     name: string;
@@ -221,10 +235,10 @@ export default function Login05() {
     })
   }, [])
   const signupSchema = yup.object({
-    name: yup.string().required("Name is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup.string().min(8, "Password must be at least 8 characters").required(),
-    confirmPassword: yup.string()
+    name: yup.string().trim().min(3).max(15).required("Name is required"),
+    email: yup.string().trim().matches(/^[a-zA-Z0-9][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).email("Invalid email").required("Email is required"),
+    password: yup.string().trim().min(8, "Password must be at least 8 characters").required(),
+    confirmPassword: yup.string().trim()
       .oneOf([yup.ref("password")], "Passwords must match")
       .required(),
   });
@@ -239,6 +253,10 @@ export default function Login05() {
 
   const onSubmit = (data: FormData) => {
     console.log("Form data:", data);
+    localStorage.setItem("user", JSON.stringify(data))
+    dispatch(rdx_login(true))
+    navigate("/")
+    
     // Add your form submission logic here
   };
   return (
@@ -258,7 +276,6 @@ export default function Login05() {
           <CardContent>
             <form onSubmit={handleSubmit((data) => {
               onSubmit(data);
-              window.location.href = "/";
             })} className="space-y-4">
               <div>
                 <Label

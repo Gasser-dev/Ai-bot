@@ -9,8 +9,11 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { Link } from "react-router";
 import gsap from "gsap";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "@/redux/hooks";
+import { rdx_login } from "@/redux/userSlice";
+import { useNavigate } from "react-router";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -168,17 +171,35 @@ const Logo = (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElemen
 
 
 export default function Login04() {
+  const data = JSON.parse(localStorage.getItem("user") || "{}")
+  const email = data.email
+  const password = data.password
+  const [emailState, setEmailState] = React.useState("")
+  const [passwordState, setPasswordState] = React.useState("")
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const handle_login = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (emailState === email && passwordState === password) {
+       dispatch(rdx_login(true))
+       navigate("/")
+    }
+    else {
+      toast.error("Invalid email or password")
+    }
+  }
   React.useEffect(() => {
-    gsap.fromTo("#login_con",{
-      y:-200,
-      opacity:0,
-    },{
-      y:0,
-      opacity:1,
-      duration:1.5,
-      ease:"power2.out",
-    })
-  })
+    const animation = gsap.from("#login_con", {
+      y: -200,
+      opacity: 0,
+      duration: 1.5,
+      ease: "power2.out"
+    });
+
+    return () => {
+      animation.kill();
+    };
+  }, []);
   return (
     <div className="flex items-center border justify-center min-h-screen">
       <div id="login_con" className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
@@ -238,7 +259,7 @@ export default function Login04() {
             </div>
           </div>
 
-          <form action="#" method="post" className="mt-6 space-y-4">
+          <form method="post" className="mt-6 space-y-4">
             <div>
               <Label
                 htmlFor="email-login-04"
@@ -249,6 +270,7 @@ export default function Login04() {
               <Input
                 type="email"
                 id="email-login-04"
+                onChange={(e) => setEmailState(e.target.value)}
                 name="email-login-04"
                 autoComplete="email"
                 placeholder="ephraim@blocks.so"
@@ -265,17 +287,16 @@ export default function Login04() {
               <Input
                 type="password"
                 id="password-login-04"
+                onChange={(e) => setPasswordState(e.target.value)}
                 name="password-login-04"
                 autoComplete="password"
                 placeholder="********"
                 className="mt-2"
               />
             </div>
-            <Link to={"/"}>            
-            <Button type="submit" className="mt-4 w-full py-2 font-medium">
+            <Button onClick={handle_login} className="mt-4 w-full py-2 font-medium">
               Sign in
             </Button>
-            </Link>
           </form>
           <p className="mt-6 text-sm text-muted-foreground dark:text-muted-foreground">
             Forgot your password?{" "}

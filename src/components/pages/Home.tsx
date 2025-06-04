@@ -2,18 +2,26 @@ import { Navbar } from "@/components/Navbar"
 import { PromptInputWithActions } from "@/components/PromptInputWithActions"
 import TextContainer from "@/components/TextContainer"
 import type { RootState } from "@/redux"
-import { useAppSelector } from "@/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import gsap from "gsap"
 import { useEffect, useRef, useState } from "react"
 import { ChatBubbleVariants } from "../ChatBubbleLayout"
 import { ChatBubble, ChatBubbleAvatar, ChatBubbleMessage } from "../ui/chat-bubble"
+import { rdx_login } from "@/redux/userSlice"
 
 function Home() {
     const non_visible = useAppSelector((state: RootState) => state.submitPrompt.hide_text)
     const messages = useAppSelector((state: RootState) => state.submitPrompt.message)
     const res = useAppSelector((state: RootState) => state.submitPrompt.isloading)
+    const dispatch = useAppDispatch()
     const [isLoading, setIsLoading] = useState(false)
     const messagesEndRef = useRef(null);
+    const handleRefresh = () => {
+      if (localStorage.user) {
+          dispatch(rdx_login(true))
+      }
+    };
+    handleRefresh()
     useEffect(() => {
         gsap.fromTo("#Input", {
             opacity: 0,

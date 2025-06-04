@@ -8,31 +8,50 @@ import {
 } from "@/components/ui/prompt-input"
 import { Button } from "@/components/ui/button"
 import { ArrowUp, Paperclip, Square, X } from "lucide-react"
-import { useRef, useState } from "react"
-import { useAppDispatch } from "@/redux/hooks"
+import { useRef, useState, type FormEvent } from "react"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { submit_hide_text, set_message, set_Loading } from "@/redux/submitPromptSlice"
+import type { RootState } from "@/redux"
+import { useNavigate } from "react-router"
+import { toast } from "react-toastify"
 
 export function PromptInputWithActions() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const uploadInputRef = useRef<HTMLInputElement>(null)
-
-  const handleSubmit = () => {
+  const isloggedIn = useAppSelector((state: RootState) => state.userSlice.loggedIn)
+  const navigate = useNavigate()
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     
-    if (input.trim() || files.length > 0) {
-      setIsLoading(true)
-      dispatch(submit_hide_text(true))
-      dispatch(set_message(input))
-      dispatch(set_Loading(true))
-      setTimeout(() => {
-        setIsLoading(false)
-        setInput("")
-        setFiles([])
-        dispatch(set_Loading(false))
-      }, 2000)
-    }
+  if ( files.length === 0 && isloggedIn === false) {
+    navigate("/login");
+    return;
   }
+
+  try {
+    // Start loading state
+    setIsLoading(true);
+    dispatch(submit_hide_text(true));
+    dispatch(set_message(input));
+    dispatch(set_Loading(true));
+
+    // Simulate async operation (replace with actual API call if needed)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Reset form and loading states
+    setInput("");
+    setFiles([]);
+  } catch (error) {
+    console.error("Submission error:", error);
+    toast.error("Failed to submit");
+  } finally {
+    // Ensure loading states are always reset
+    setIsLoading(false);
+    dispatch(set_Loading(false));
+  }
+};
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -55,7 +74,6 @@ export function PromptInputWithActions() {
       value={input}
       onValueChange={setInput}
       isLoading={isLoading}
-      onSubmit={handleSubmit}
       className="w-full max-w-full h-24 md:h-32 bg-[#724fa1] border-0"
     >
       {files.length > 0 && (

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import submitPrompt from './submitPromptSlice.ts'
+import userSlice from './userSlice.ts'
 // ...
 
 export const store = configureStore({
   reducer: {
     submitPrompt,
+    userSlice,
   },
 })
 
