@@ -93,7 +93,7 @@ const Navbar1 = ({
               <Button onClick={() => navigate("/login")} asChild variant="outline" size="sm">
                 <a>{auth.login.text}</a>
               </Button>
-              <Button onClick={() => navigate("/signin")} asChild size="sm">
+              <Button onClick={() => navigate("/signup")} asChild size="sm">
                 <a>{auth.signup.text}</a>
               </Button>
             </div>
