@@ -4,6 +4,7 @@ import Pages from './components/pages'
 import { ToastContainer } from 'react-toastify';
 
 function App() {
+  const callbackUrl = "https://ai-bot1.netlify.app/auth/callback";
   return (
     <> 
     <Pages/>

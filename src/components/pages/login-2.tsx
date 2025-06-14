@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/hooks";
 import { rdx_login } from "@/redux/userSlice";
 import { useNavigate } from "react-router";
+import { signInWithPopup } from "firebase/auth";
+import {auth, googleProvider, githubProvider} from "D:/AiWeb/ai-website/src/firebaseConfig.ts";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -178,6 +180,27 @@ export default function Login04() {
   const [passwordState, setPasswordState] = React.useState("")
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  const logInWithGoogle = async () => {
+try{
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    alert(user);
+
+  }catch(error:any){
+    toast.error(error)
+  }}
+  const logInWithGithub = async () => {
+    try{
+      const result = await signInWithPopup(auth, githubProvider);
+      const user = result.user;
+      toast.success(`welcome ${user}`);
+  
+    }catch(error:any){
+      toast.error(error)
+    }
+  }
+
   const handle_login = (e: React.FormEvent) => {
     e.preventDefault()
     if (emailState === email && passwordState === password) {
