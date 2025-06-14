@@ -254,7 +254,7 @@ try{
               className="flex-1 items-center justify-center space-x-2 py-2"
               asChild
             >
-              <a href="#">
+              <a onClick={logInWithGithub}>
                 <GitHubIcon className="size-5" aria-hidden={true} />
                 <span className="text-sm font-medium">Login with GitHub</span>
               </a>
@@ -264,7 +264,7 @@ try{
               className="mt-2 flex-1 items-center justify-center space-x-2 py-2 sm:mt-0"
               asChild
             >
-              <a href="#">
+              <a onClick={logInWithGoogle}>
                 <GoogleIcon className="size-4" aria-hidden={true} />
                 <span className="text-sm font-medium">Login with Google</span>
               </a>
