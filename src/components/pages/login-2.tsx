@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/hooks";
 import { rdx_login } from "@/redux/userSlice";
 import { useNavigate } from "react-router";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, updateProfile } from "firebase/auth";
 import {auth, googleProvider, githubProvider} from "@/firebaseConfig.ts";
 
 function cn(...inputs: ClassValue[]) {
@@ -182,26 +182,105 @@ export default function Login04() {
   const navigate = useNavigate()
 
   const logInWithGoogle = async () => {
-try{
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    localStorage.user = JSON.stringify(user)
-    toast.success(`welcome ${user.displayName}`);
-
-  }catch(error:any){
-    toast.error(error)
-  }}
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      // Store only essential user data securely
+      const userData = {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        providerId: user.providerId
+      };
+      
+      // Use setItem instead of direct property assignment
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Welcome message with fallback for displayName
+      const welcomeName = user.displayName || user.email || 'User';
+      toast.success(`Welcome ${welcomeName}!`);
+      rdx_login(true)
+      navigate("/")
+      // Optional: You might want to redirect or update state here
+      // navigate('/dashboard'); 
+  
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      
+      // Improved error handling
+      let errorMessage = 'Failed to sign in with Google';
+      
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/account-exists-with-different-credential':
+            errorMessage = 'An account already exists with a different provider';
+            break;
+          case 'auth/popup-closed-by-user':
+            errorMessage = 'Sign in was cancelled';
+            break;
+          case 'auth/cancelled-popup-request':
+            errorMessage = 'Sign in popup was closed too quickly';
+            break;
+          case 'auth/popup-blocked':
+            errorMessage = 'Sign in popup was blocked by your browser';
+            break;
+        }
+      }
+      
+      toast.error(errorMessage);
+    }
+  };
   const logInWithGithub = async () => {
-    try{
+    try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      localStorage.user = JSON.stringify(user)
-      console.log(user);
-  
-    }catch(error:any){
-      toast.error(error)
+      
+      // GitHub often returns null for displayName, so we'll create a fallback
+      let displayName = user.displayName;
+      
+      if (!displayName) {
+        // Extract name from email or use 'GitHub User' as fallback
+        displayName = user.email?.split('@')[0] || 'GitHub User';
+      }
+      
+      // Store only necessary user information
+      const userData = {
+        uid: user.uid,
+        displayName: displayName, // Use our processed name
+        email: user.email,
+        photoURL: user.photoURL
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      toast.success(`Welcome ${displayName}!`);
+      rdx_login(true)
+      navigate("/")
+      
+      // Optional: Update the user's profile if displayName is null
+      if (!user.displayName && user.email) {
+        await updateProfile(user, {
+          displayName: displayName
+        });
+      }
+      
+    } catch (error: any) {
+      console.error('GitHub login error:', error);
+      
+      let errorMessage = 'Failed to sign in with GitHub';
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        errorMessage = 'An account already exists with a different provider';
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign in was cancelled';
+      } else if (error.code === 'auth/cancelled-popup-request') {
+        errorMessage = 'Sign in popup was closed too quickly';
+      }
+      
+      toast.error(errorMessage);
     }
-  }
+  };
 
   const handle_login = (e: React.FormEvent) => {
     e.preventDefault()
