@@ -13,7 +13,7 @@ import gsap from "gsap";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "@/redux/hooks";
 import { rdx_login } from "@/redux/userSlice";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { signInWithPopup, updateProfile } from "firebase/auth";
 import {auth, googleProvider, githubProvider} from "@/firebaseConfig.ts";
 
@@ -335,7 +335,7 @@ export default function Login04() {
               className="flex-1 items-center justify-center space-x-2 py-2"
               asChild
             >
-              <a onClick={logInWithGithub}>
+              <a onClick={logInWithGithub} className="cursor-pointer">
                 <GitHubIcon className="size-5" aria-hidden={true} />
                 <span className="text-sm font-medium">Login with GitHub</span>
               </a>
@@ -345,7 +345,7 @@ export default function Login04() {
               className="mt-2 flex-1 items-center justify-center space-x-2 py-2 sm:mt-0"
               asChild
             >
-              <a onClick={logInWithGoogle}>
+              <a onClick={logInWithGoogle} className="cursor-pointer">
                 <GoogleIcon className="size-4" aria-hidden={true} />
                 <span className="text-sm font-medium">Login with Google</span>
               </a>

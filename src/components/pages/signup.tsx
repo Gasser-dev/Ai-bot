@@ -14,7 +14,7 @@ import gsap from "gsap";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hooks";
 import { rdx_login } from "@/redux/userSlice";
 

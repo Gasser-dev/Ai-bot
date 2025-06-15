@@ -12,7 +12,7 @@ import { useRef, useState, type FormEvent } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { submit_hide_text, set_message, set_Loading } from "@/redux/submitPromptSlice"
 import type { RootState } from "@/redux"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
 export function PromptInputWithActions() {

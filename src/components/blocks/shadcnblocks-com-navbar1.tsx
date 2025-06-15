@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import type { RootState } from "@/redux";
 import { rdx_login } from "@/redux/userSlice";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface MenuItem {
   title: string;
