@@ -185,7 +185,7 @@ export default function Login04() {
 try{
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    alert(user);
+    console.log(user);
 
   }catch(error:any){
     toast.error(error)
