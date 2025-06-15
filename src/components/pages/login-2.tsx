@@ -15,7 +15,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { rdx_login } from "@/redux/userSlice";
 import { useNavigate } from "react-router";
 import { signInWithPopup } from "firebase/auth";
-import {auth, googleProvider, githubProvider} from "D:/AiWeb/ai-website/src/firebaseConfig.ts";
+import {auth, googleProvider, githubProvider} from "@/firebaseConfig.ts";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
