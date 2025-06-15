@@ -91,10 +91,10 @@ const Navbar1 = ({
             !isloggedIn ? (
               <div className="flex gap-2">
               <Button onClick={() => navigate("/login")} asChild variant="outline" size="sm">
-                <a>{auth.login.text}</a>
+                <a className="cursor-pointer">{auth.login.text}</a>
               </Button>
               <Button onClick={() => navigate("/signup")} asChild size="sm">
-                <a>{auth.signup.text}</a>
+                <a className="cursor-pointer">{auth.signup.text}</a>
               </Button>
             </div>
             )

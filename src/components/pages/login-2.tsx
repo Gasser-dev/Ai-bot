@@ -189,7 +189,7 @@ export default function Login04() {
       // Store only essential user data securely
       const userData = {
         uid: user.uid,
-        displayName: user.displayName,
+        name: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
         providerId: user.providerId
@@ -248,7 +248,7 @@ export default function Login04() {
       // Store only necessary user information
       const userData = {
         uid: user.uid,
-        displayName: displayName, // Use our processed name
+        name: displayName, // Use our processed name
         email: user.email,
         photoURL: user.photoURL
       };
