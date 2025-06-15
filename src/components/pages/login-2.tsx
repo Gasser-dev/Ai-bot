@@ -185,7 +185,8 @@ export default function Login04() {
 try{
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    console.log(user);
+    localStorage.user = JSON.stringify(user)
+    toast.success(`welcome ${user.displayName}`);
 
   }catch(error:any){
     toast.error(error)
@@ -194,7 +195,8 @@ try{
     try{
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      toast.success(`welcome ${user}`);
+      localStorage.user = JSON.stringify(user)
+      console.log(user);
   
     }catch(error:any){
       toast.error(error)
