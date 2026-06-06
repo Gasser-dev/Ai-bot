@@ -8,25 +8,20 @@ import {
 } from "@/components/ui/prompt-input"
 import { Button } from "@/components/ui/button"
 import { ArrowUp, Paperclip, Square, X } from "lucide-react"
-import { useRef, useState, type FormEvent } from "react"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { submit_hide_text, set_message, set_Loading, set_response, add_to_chat_history } from "@/redux/submitPromptSlice"
-import type { RootState } from "@/redux"
-import { useNavigate } from "react-router-dom"
+import { useRef, useState } from "react"
+import { useAppDispatch } from "@/redux/hooks"
+import { set_message, set_Loading, add_to_chat_history } from "@/redux/submitPromptSlice"
 // import { toast } from "react-toastify"
 import { getGeminiResponse } from '../services/gemini';
-import { a, s } from "node_modules/framer-motion/dist/types.d-CtuPurYT"
-import { set } from "react-hook-form"
+
 
 export function PromptInputWithActions() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const uploadInputRef = useRef<HTMLInputElement>(null)
-  const isloggedIn = useAppSelector((state: RootState) => state.userSlice.loggedIn)
-  const navigate = useNavigate()
-  const [userMessage, setUserMessage] = useState<{role: string, text: string}>({role: '', text: ''});
-  const [botMessage, setBotMessage] = useState<{role: string, text: string}>({role: '', text: ''});
+  const [, setUserMessage] = useState<{role: string, text: string}>({role: '', text: ''});
+  const [, setBotMessage] = useState<{role: string, text: string}>({role: '', text: ''});
 
 const handleSend = async () => {
   if (!input.trim()) return;

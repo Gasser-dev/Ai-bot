@@ -65,9 +65,8 @@ const Navbar1 = ({
 }: Navbar1Props) => {
   const isloggedIn = useAppSelector((state: RootState) => state.userSlice.loggedIn)
   const dispatch = useAppDispatch()
-  const data = JSON.parse(localStorage.getItem("user") || "{}")
   const navigate = useNavigate()
-  const name = data?.name
+
   const handle_logout = () => {
     dispatch(rdx_login(false))
     localStorage.removeItem("user")
