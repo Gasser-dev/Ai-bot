@@ -51,7 +51,7 @@ export function ChatBubbleMessage({
         className
       )}
     >
-      {isLoading ? (
+      { isLoading ? (
         <div className="flex items-center space-x-2">
           <MessageLoading />
         </div>

@@ -2,7 +2,6 @@
 import './index.css'
 import Pages from './components/pages'
 import { ToastContainer } from 'react-toastify';
-
 function App() {
   return (
     <> 

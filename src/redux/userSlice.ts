@@ -5,7 +5,7 @@ interface UserState {
 }
 const initialState: UserState = {
   users: [],
-  loggedIn: false,
+  loggedIn: true,
 };
 
 const userSlice = createSlice({

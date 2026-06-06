@@ -100,7 +100,6 @@ const Navbar1 = ({
             )
             :
             <div className="flex gap-2 items-center">
-              <p className="text-white">welcome back {name}</p>
               <Button onClick={handle_logout} variant="outline" role="button">
                 Logout
               </Button>
@@ -157,7 +156,6 @@ const Navbar1 = ({
             )
             :
             <div className="flex flex-col items-center gap-3">
-              <p>welcome back {name}</p>
               <Button onClick={handle_logout} variant="outline">
                 Logout
               </Button>

@@ -10,10 +10,13 @@ import { Button } from "@/components/ui/button"
 import { ArrowUp, Paperclip, Square, X } from "lucide-react"
 import { useRef, useState, type FormEvent } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { submit_hide_text, set_message, set_Loading } from "@/redux/submitPromptSlice"
+import { submit_hide_text, set_message, set_Loading, set_response, add_to_chat_history } from "@/redux/submitPromptSlice"
 import type { RootState } from "@/redux"
 import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
+// import { toast } from "react-toastify"
+import { getGeminiResponse } from '../services/gemini';
+import { a, s } from "node_modules/framer-motion/dist/types.d-CtuPurYT"
+import { set } from "react-hook-form"
 
 export function PromptInputWithActions() {
   const [input, setInput] = useState("")
@@ -22,36 +25,64 @@ export function PromptInputWithActions() {
   const uploadInputRef = useRef<HTMLInputElement>(null)
   const isloggedIn = useAppSelector((state: RootState) => state.userSlice.loggedIn)
   const navigate = useNavigate()
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    
-  if ( files.length === 0 && isloggedIn === false) {
-    navigate("/login");
-    return;
-  }
+  const [userMessage, setUserMessage] = useState<{role: string, text: string}>({role: '', text: ''});
+  const [botMessage, setBotMessage] = useState<{role: string, text: string}>({role: '', text: ''});
 
-  try {
-    // Start loading state
-    setIsLoading(true);
-    dispatch(submit_hide_text(true));
-    dispatch(set_message(input));
-    dispatch(set_Loading(true));
+const handleSend = async () => {
+  if (!input.trim()) return;
 
-    // Simulate async operation (replace with actual API call if needed)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+  const userMsg = { role: 'user', text: input };
+  setUserMessage(userMsg);
+  dispatch(add_to_chat_history(userMsg));
+
+  setIsLoading(true);
+  dispatch(set_Loading(true));
+  setInput('');
+
+  const aiResponseText = await getGeminiResponse(input);
+  const aiResponseString = aiResponseText?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't generate a response.";
     
-    // Reset form and loading states
-    setInput("");
-    setFiles([]);
-  } catch (error) {
-    console.error("Submission error:", error);
-    toast.error("Failed to submit");
-  } finally {
-    // Ensure loading states are always reset
-    setIsLoading(false);
-    dispatch(set_Loading(false));
-  }
+  console.log("AI Response:", aiResponseText);
+
+  const botMsg = { role: 'bot', text: aiResponseString };
+  setBotMessage(botMsg);
+  dispatch(add_to_chat_history(botMsg));
+
+  setIsLoading(false);
+  dispatch(set_Loading(false));
+  setFiles([]);
+  dispatch(set_message(input));
 };
+//   const handleSubmit = async (e: FormEvent) => {
+//     e.preventDefault();
+    
+//   if ( files.length === 0 && isloggedIn === false) {
+//     navigate("/login");
+//     return;
+//   }
+
+//   try {
+//     // Start loading state
+//     setIsLoading(true);
+//     dispatch(submit_hide_text(true));
+//     dispatch(set_message(input));
+//     dispatch(set_Loading(true));
+
+//     // Simulate async operation (replace with actual API call if needed)
+//     await new Promise(resolve => setTimeout(resolve, 2000));
+    
+//     // Reset form and loading states
+//     setInput("");
+//     setFiles([]);
+//   } catch (error) {
+//     console.error("Submission error:", error);
+//     toast.error("Failed to submit");
+//   } finally {
+//     // Ensure loading states are always reset
+//     setIsLoading(false);
+//     dispatch(set_Loading(false));
+//   }
+// };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -96,7 +127,7 @@ export function PromptInputWithActions() {
         </div>
       )}
 
-      <PromptInputTextarea placeholder="Ask me anything..." />
+      <PromptInputTextarea placeholder="Ask me anything..." onKeyDown={(e) => e.key == 'Enter' && handleSend()}/>
 
       <PromptInputActions className="flex items-center justify-between gap-2 pt-2">
         <PromptInputAction tooltip="Attach files">
@@ -122,7 +153,7 @@ export function PromptInputWithActions() {
             variant="default"
             size="icon"
             className="h-8 w-8 rounded-full"
-            onClick={handleSubmit}
+            onClick={handleSend}
           >
             {isLoading ? (
               <Square className="size-5 fill-current" />
