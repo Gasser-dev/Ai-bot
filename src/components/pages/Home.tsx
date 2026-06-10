@@ -68,7 +68,6 @@ function Home() {
       duration: 1,
     })
   }, [])
-  console.log("Chat History:", chatHistory)
 
   useEffect(() => {
     setIsLoading(res)
